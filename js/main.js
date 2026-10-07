@@ -5,10 +5,10 @@
  */
 
 // Hämta element från DOM
-const form = document.querySelector("#studentform");
+
 const clearButton = document.querySelector("#clear");
 
-const fullnameInput = document.querySelector("#fullname");
+const fullnameInput = document.querySelector("#fullname").value;
 const emailInput = document.querySelector("#email");
 const phoneInput = document.querySelector("#phone");
 const fontSelect = document.querySelector("#font");
@@ -22,8 +22,46 @@ const historySection = document.querySelector("#history");
 const deleteHistoryButton = document.querySelector("#delete");
 
 
-// Array som används för felmeddelanden
-let errors = [];
+
+const form = document.querySelector("#studentform");
+form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const fullnameInput = document.querySelector("#fullname").value;
+    const emailInput = document.querySelector("#email").value;
+    const phoneInput = document.querySelector("#phone").value;
+    const errorList = document.querySelector("#errorlist");
+
+    // Återställer felmeddelande
+    errorlist.innerHTML = "";
+    document.querySelector("#fullname").style.border = "1px solid #ccc"
+    document.querySelector("#email").style.border = "1px solid #ccc"
+
+    // Array som används för felmeddelanden
+    let errorArr = [];
+
+    // Validera namn
+    if (fullnameInput.length === 0) {
+        errorArr.push("Ange ett namn");
+        document.querySelector("#fullname").style.border = "2px solid #FF0000"
+    }
+
+    // Validera e-post
+    if (emailInput.length === 0) {
+        errorArr.push("Ange ett e-post");
+        document.querySelector("#email").style.border = "2px solid #FF0000"
+    }
+
+    // Validera telefon
+    if (phoneInput.length === 0) {
+        errorArr.push("Ange ett telefonfummer");
+        document.querySelector("#phone").style.border = "2px solid #FF0000"
+    }
+
+})
+
+
+
 
 // Array som innehåller sparade studentkort
 let history = [];
@@ -33,6 +71,8 @@ let history = [];
  * @returns {boolean}
  */
 function validateForm() {
+
+
     // Kontrollera formulärets obligatoriska fält
 
     // Visa eventuella felmeddelanden
@@ -56,6 +96,7 @@ function displayErrors() {
  */
 function createStudentCard() {
     // Hämta information från formuläret
+
 
     // Uppdatera studentkortet
 
