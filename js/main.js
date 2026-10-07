@@ -58,6 +58,16 @@ form.addEventListener("submit", function (event) {
         document.querySelector("#phone").style.border = "2px solid #FF0000"
     }
 
+    
+    // Felmeddelande i lista
+    errorArr.forEach(error => {
+        const liEl = document.createElement("li");
+        const textNode = document.createTextNode(error);
+        liEl.appendChild(textNode);
+        errorList.appendChild(liEl);
+
+    });
+
 })
 
 
