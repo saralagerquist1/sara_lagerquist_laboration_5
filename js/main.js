@@ -68,7 +68,19 @@ form.addEventListener("submit", function (event) {
 
     });
 
+    // Sparar i Local Storage
+    const user = {
+        name: fullnameInput,
+        email: emailInput,
+        phone: phoneInput
+    }
+
+
+    const userJson = JSON.stringify(user);
+
+    localStorage.setItem("user", userJson);
 })
+
 
 
 
