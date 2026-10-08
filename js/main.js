@@ -88,13 +88,16 @@ function writeUser() {
     const userJson = localStorage.getItem("user");
     const user = JSON.parse(userJson);
 
-   
-
     const previewfullname = document.querySelector("#previewfullname");
     const previewemail = document.querySelector("#previewemail");
     const previewphone = document.querySelector("#previewphone");
 
 
+    // Uppdatera studentkortet
+    previewfullname.append(`: ${user.name}`);
+    previewemail.append(`: ${user.email}`);
+    previewphone.append(`: ${user.phone}`);
+    
     // Lägg till studentkortet i historiken
 
     // Spara och uppdatera historiken
