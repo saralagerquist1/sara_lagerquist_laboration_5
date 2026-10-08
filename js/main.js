@@ -58,7 +58,7 @@ form.addEventListener("submit", function (event) {
         document.querySelector("#phone").style.border = "2px solid #FF0000"
     }
 
-    
+
     // Felmeddelande i lista
     errorArr.forEach(error => {
         const liEl = document.createElement("li");
@@ -77,11 +77,30 @@ form.addEventListener("submit", function (event) {
 
 
     const userJson = JSON.stringify(user);
-
     localStorage.setItem("user", userJson);
+
+    writeUser();
 })
 
+function writeUser() {
 
+    // Hämta information från formuläret
+    const userJson = localStorage.getItem("user");
+    const user = JSON.parse(userJson);
+
+   
+
+    const previewfullname = document.querySelector("#previewfullname");
+    const previewemail = document.querySelector("#previewemail");
+    const previewphone = document.querySelector("#previewphone");
+
+
+    // Lägg till studentkortet i historiken
+
+    // Spara och uppdatera historiken
+}
+
+writeUser();
 
 
 
