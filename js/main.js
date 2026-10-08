@@ -1,14 +1,14 @@
 "use strict";
 /*
  * Laboration 5 - Studentkortsgenerator
- * Namn: DITT NAMN
+ * Namn: Sara Lagerquist
  */
 
 // Hämta element från DOM
 
 const clearButton = document.querySelector("#clear");
 
-const fullnameInput = document.querySelector("#fullname").value;
+const fullnameInput = document.querySelector("#fullname");
 const emailInput = document.querySelector("#email");
 const phoneInput = document.querySelector("#phone");
 const fontSelect = document.querySelector("#font");
@@ -22,40 +22,36 @@ const historySection = document.querySelector("#history");
 const deleteHistoryButton = document.querySelector("#delete");
 
 
-
 const form = document.querySelector("#studentform");
+
+// Eventlyssnare när man klickar på submit
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    const fullnameInput = document.querySelector("#fullname").value;
-    const emailInput = document.querySelector("#email").value;
-    const phoneInput = document.querySelector("#phone").value;
-    const errorList = document.querySelector("#errorlist");
+  
 
     // Återställer felmeddelande
-    errorlist.innerHTML = "";
-    document.querySelector("#fullname").style.border = "1px solid #ccc"
-    document.querySelector("#email").style.border = "1px solid #ccc"
+    errorList.innerHTML = "";
+    document.querySelector("#fullname").style.border = "1px solid #ccc";
+    document.querySelector("#email").style.border = "1px solid #ccc";
+    document.querySelector("#phone").style.border = "1px solid #ccc";
 
     // Array som används för felmeddelanden
     let errorArr = [];
 
     // Validera namn
-    if (fullnameInput.length === 0) {
+    if (fullnameInput.value.length === 0) {
         errorArr.push("Ange ett namn");
-        document.querySelector("#fullname").style.border = "2px solid #FF0000"
     }
 
     // Validera e-post
-    if (emailInput.length === 0) {
+    if (emailInput.value.length === 0) {
         errorArr.push("Ange ett e-post");
-        document.querySelector("#email").style.border = "2px solid #FF0000"
     }
 
     // Validera telefon
-    if (phoneInput.length === 0) {
+    if (phoneInput.value.length === 0) {
         errorArr.push("Ange ett telefonfummer");
-        document.querySelector("#phone").style.border = "2px solid #FF0000"
     }
 
 
@@ -70,9 +66,9 @@ form.addEventListener("submit", function (event) {
 
     // Sparar i Local Storage
     const user = {
-        name: fullnameInput,
-        email: emailInput,
-        phone: phoneInput
+        name: fullnameInput.value,
+        email: emailInput.value,
+        phone: phoneInput.value
     }
 
 
@@ -88,28 +84,22 @@ function writeUser() {
     const userJson = localStorage.getItem("user");
     const user = JSON.parse(userJson);
 
-      // Funktion som körs när inga värden finns
+    // Funktion som körs när inga värden finns
     if (user === null) {
         return;
     }
 
-    const previewfullname = document.querySelector("#previewfullname");
-    const previewemail = document.querySelector("#previewemail");
-    const previewphone = document.querySelector("#previewphone");
-
 
     // Uppdatera studentkortet
+
     previewfullname.append(`: ${user.name}`);
     previewemail.append(`: ${user.email}`);
     previewphone.append(`: ${user.phone}`);
-    
+
     // Lägg till studentkortet i historiken
 
     // Spara och uppdatera historiken
 }
-
-writeUser();
-
 
 
 // Array som innehåller sparade studentkort
