@@ -88,6 +88,11 @@ function writeUser() {
     const userJson = localStorage.getItem("user");
     const user = JSON.parse(userJson);
 
+      // Funktion som körs när inga värden finns
+    if (user === null) {
+        return;
+    }
+
     const previewfullname = document.querySelector("#previewfullname");
     const previewemail = document.querySelector("#previewemail");
     const previewphone = document.querySelector("#previewphone");
