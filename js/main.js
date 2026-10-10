@@ -33,6 +33,7 @@ let history = [];
 // Eventlyssnare
 clearButton.addEventListener("click", clearForm);
 form.addEventListener("submit", onSubmit);
+deleteHistoryButton.addEventListener("click", deleteHistory);
 
 
 function onSubmit(event) {
@@ -52,7 +53,7 @@ function onSubmit(event) {
 
     // Rensar förmulär efter lyckad submit
 
-    clearForm();
+
 
 
 
@@ -157,7 +158,7 @@ function saveHistory(name, email, phone) {
     const localStorageData = localStorage.getItem("users");
 
     let users = JSON.parse(localStorageData);
-   
+
     if (users === null) {
         users = [];
     }
@@ -228,8 +229,6 @@ function clearForm() {
     emailInput.value = "";
     phoneInput.value = "";
 
-
-
     // Rensa eventuella felmeddelanden
 }
 
@@ -239,8 +238,10 @@ function clearForm() {
  */
 function deleteHistory() {
     // Radera sparad historik
-
+    localStorage.removeItem("users");
     // Uppdatera history och visningen på sidan
+    history = [];
+    historySection.innerHTML = "";
 }
 
 
