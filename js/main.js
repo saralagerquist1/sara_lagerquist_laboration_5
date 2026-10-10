@@ -25,99 +25,99 @@ const form = document.querySelector("#studentform");
 
 
 
+let errorArr = [];
+
 // Array som innehåller sparade studentkort
 let history = [];
 
 // Eventlyssnare
-form.addEventListener("submit", function (event) {
-    // Förhindrar att sidan laddas om
+clearButton.addEventListener("click", clearForm);
+form.addEventListener("submit", onSubmit);
+
+
+function onSubmit(event) {
     event.preventDefault();
 
-    const valid = validateForm();
+    // Läser in värden från formuläret
+    const name = fullnameInput.value.trim();
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim();
 
-    if (!valid) {
-        return;
+    if (!validateForm(name, email, phone)) {
+        displayErrors();
+    } else {
+        saveHistory(name, email, phone);
+        clearForm();
     }
-
-    // Sparar i Local Storage
-    const user = {
-        name: fullnameInput.value,
-        email: emailInput.value,
-        phone: phoneInput.value
-    }
-
-    const userJson = JSON.stringify(user);
-    localStorage.setItem("user", userJson);
 
     // Rensar förmulär efter lyckad submit
-    fullnameInput.value = "";
-    emailInput.value = "";
-    phoneInput.value = "";
 
-    createStudentCard();
+    clearForm();
 
-});
+
+
+};
 
 /**
  * Validerar formulärets inmatning.
  * @returns {boolean}
  */
 
-function validateForm() {
 
+// Validerar formuläret
+function validateForm(name, email, phone) {
+
+    // Array för felmeddelanden
+
+    errorArr = [];
+    errorList.innerHTML = "";
 
     // Kontrollera formulärets obligatoriska fält
+    let validate = true;
 
-    // Array som används för felmeddelanden
-    let errorArr = [];
+
 
     // Visa eventuella felmeddelanden
-
     // Validera namn
-    if (fullnameInput.value.length === 0) {
+    if (name.length === 0) {
         errorArr.push("Ange ett namn");
+        validate = false;
     }
 
     // Validera e-post
-    if (emailInput.value.length === 0) {
+    if (email.length === 0) {
         errorArr.push("Ange ett e-post");
+        validate = false;
     }
 
     // Validera telefon
-    if (phoneInput.value.length === 0) {
+    if (phone.length === 0) {
         errorArr.push("Ange ett telefonnummer");
+        validate = false;
     }
 
-    // 
-    displayErrors(errorArr);
-
     // Returnera resultatet av validering
-    return errorArr.length === 0;
+    return validate;
 }
-
 
 /**
  * Visar felmeddelanden på sidan.
  */
 
-function displayErrors(errorArr) {
+function displayErrors() {
 
     // Rensa tidigare felmeddelanden
-    errorList.innerHTML = "";
-    document.querySelector("#fullname").style.border = "1px solid #ccc";
-    document.querySelector("#email").style.border = "1px solid #ccc";
-    document.querySelector("#phone").style.border = "1px solid #ccc";
 
-    // Skriv ut aktuella felmeddelanden till DOM
-    errorArr.forEach(error => {
-        const liEl = document.createElement("li");
-        const textNode = document.createTextNode(error);
 
-        liEl.appendChild(textNode);
-        errorList.appendChild(liEl);
+    if (errorArr.length > 0) {
+        for (let i = 0; i < errorArr.length; i++) {
+            const liEl = document.createElement("li");
+            liEl.innerHTML = (errorArr[i]);
 
-    });
+            errorList.appendChild(liEl);
 
+        }
+    }
 
 }
 
@@ -125,35 +125,49 @@ function displayErrors(errorArr) {
 /**
  * Skapar ett studentkort och visar det på sidan.
  */
+
 function createStudentCard() {
 
     // Hämta information från formuläret
-    const userJson = localStorage.getItem("user");
-    const user = JSON.parse(userJson);
+
 
     // Funktion som körs när inga värden finns
-    if (user === null) {
-        return;
-    }
+
 
     // Uppdatera studentkortet
-    previewfullname.textContent = `Namn ${user.name}`;
-    previewemail.textContent = `E-post ${user.email}`;
-    previewphone.textContent = `Telefon ${user.phone}`;
+
     // Lägg till studentkortet i historiken
 
     // Spara och uppdatera historiken
 }
 
-
-
-
-
 /**
  * Sparar historiken i localStorage.
  */
-function saveHistory() {
+
+function saveHistory(name, email, phone) {
+
     // Spara history i localStorage
+    const user = {
+        name: name,
+        email: email,
+        phone: phone
+    }
+
+    const localStorageData = localStorage.getItem("users");
+
+    let users = JSON.parse(localStorageData);
+   
+    if (users === null) {
+        users = [];
+    }
+    users.push(user);
+
+    const usersJson = JSON.stringify(users);
+
+    localStorage.setItem("users", usersJson);
+
+    renderHistory();
 }
 
 
@@ -171,20 +185,49 @@ function loadHistory() {
  * Visar historiken på sidan.
  */
 function renderHistory() {
+
     // Rensa tidigare visad historik
 
     // Skriv ut innehållet i history till DOM
+
+    const localStorageData = localStorage.getItem("users");
+
+    const users = JSON.parse(localStorageData);
+    if (users === null) {
+        return;
+    }
+
+
+
+    for (let i = 0; i < users.length; i++) {
+        const sectionEl = document.createElement("section");
+
+        const pEl = document.createElement("p");
+        pEl.innerHTML = `Namn: ${users[i].name}
+        <br>
+        E-postadress: ${users[i].email}
+        <br>
+        Telefon: ${users[i].phone}`;
+
+        sectionEl.appendChild(pEl);
+        historySection.appendChild(sectionEl);
+    }
 }
 
 
 /**
  * Rensar formulär, aktuellt studentkort och felmeddelanden.
  */
+
+
 function clearForm() {
 
     // Återställ formulär och studentkort
 
-    
+    fullnameInput.value = "";
+    emailInput.value = "";
+    phoneInput.value = "";
+
 
 
     // Rensa eventuella felmeddelanden
