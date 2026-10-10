@@ -21,23 +21,57 @@ const errorList = document.querySelector("#errorlist");
 const historySection = document.querySelector("#history");
 const deleteHistoryButton = document.querySelector("#delete");
 
-
 const form = document.querySelector("#studentform");
 
-// Eventlyssnare när man klickar på submit
+
+
+// Array som innehåller sparade studentkort
+let history = [];
+
+// Eventlyssnare
 form.addEventListener("submit", function (event) {
+    // Förhindrar att sidan laddas om
     event.preventDefault();
 
-  
+    const valid = validateForm();
 
-    // Återställer felmeddelande
-    errorList.innerHTML = "";
-    document.querySelector("#fullname").style.border = "1px solid #ccc";
-    document.querySelector("#email").style.border = "1px solid #ccc";
-    document.querySelector("#phone").style.border = "1px solid #ccc";
+    if (!valid) {
+        return;
+    }
+
+    // Sparar i Local Storage
+    const user = {
+        name: fullnameInput.value,
+        email: emailInput.value,
+        phone: phoneInput.value
+    }
+
+    const userJson = JSON.stringify(user);
+    localStorage.setItem("user", userJson);
+
+    // Rensar förmulär efter lyckad submit
+    fullnameInput.value = "";
+    emailInput.value = "";
+    phoneInput.value = "";
+
+    createStudentCard();
+
+});
+
+/**
+ * Validerar formulärets inmatning.
+ * @returns {boolean}
+ */
+
+function validateForm() {
+
+
+    // Kontrollera formulärets obligatoriska fält
 
     // Array som används för felmeddelanden
     let errorArr = [];
+
+    // Visa eventuella felmeddelanden
 
     // Validera namn
     if (fullnameInput.value.length === 0) {
@@ -51,34 +85,47 @@ form.addEventListener("submit", function (event) {
 
     // Validera telefon
     if (phoneInput.value.length === 0) {
-        errorArr.push("Ange ett telefonfummer");
+        errorArr.push("Ange ett telefonnummer");
     }
 
+    // 
+    displayErrors(errorArr);
 
-    // Felmeddelande i lista
+    // Returnera resultatet av validering
+    return errorArr.length === 0;
+}
+
+
+/**
+ * Visar felmeddelanden på sidan.
+ */
+
+function displayErrors(errorArr) {
+
+    // Rensa tidigare felmeddelanden
+    errorList.innerHTML = "";
+    document.querySelector("#fullname").style.border = "1px solid #ccc";
+    document.querySelector("#email").style.border = "1px solid #ccc";
+    document.querySelector("#phone").style.border = "1px solid #ccc";
+
+    // Skriv ut aktuella felmeddelanden till DOM
     errorArr.forEach(error => {
         const liEl = document.createElement("li");
         const textNode = document.createTextNode(error);
+
         liEl.appendChild(textNode);
         errorList.appendChild(liEl);
 
     });
 
-    // Sparar i Local Storage
-    const user = {
-        name: fullnameInput.value,
-        email: emailInput.value,
-        phone: phoneInput.value
-    }
+
+}
 
 
-    const userJson = JSON.stringify(user);
-    localStorage.setItem("user", userJson);
-
-    writeUser();
-})
-
-function writeUser() {
+/**
+ * Skapar ett studentkort och visar det på sidan.
+ */
+function createStudentCard() {
 
     // Hämta information från formuläret
     const userJson = localStorage.getItem("user");
@@ -89,60 +136,17 @@ function writeUser() {
         return;
     }
 
-
     // Uppdatera studentkortet
-
-    previewfullname.append(`: ${user.name}`);
-    previewemail.append(`: ${user.email}`);
-    previewphone.append(`: ${user.phone}`);
-
+    previewfullname.textContent = `Namn ${user.name}`;
+    previewemail.textContent = `E-post ${user.email}`;
+    previewphone.textContent = `Telefon ${user.phone}`;
     // Lägg till studentkortet i historiken
 
     // Spara och uppdatera historiken
 }
 
 
-// Array som innehåller sparade studentkort
-let history = [];
 
-/**
- * Validerar formulärets inmatning.
- * @returns {boolean}
- */
-function validateForm() {
-
-
-    // Kontrollera formulärets obligatoriska fält
-
-    // Visa eventuella felmeddelanden
-
-    // Returnera resultatet (true eller false) av valideringen
-}
-
-
-/**
- * Visar felmeddelanden på sidan.
- */
-function displayErrors() {
-    // Rensa tidigare felmeddelanden
-
-    // Skriv ut aktuella felmeddelanden till DOM
-}
-
-
-/**
- * Skapar ett studentkort och visar det på sidan.
- */
-function createStudentCard() {
-    // Hämta information från formuläret
-
-
-    // Uppdatera studentkortet
-
-    // Lägg till studentkortet i historiken
-
-    // Spara och uppdatera historiken
-}
 
 
 /**
@@ -177,7 +181,11 @@ function renderHistory() {
  * Rensar formulär, aktuellt studentkort och felmeddelanden.
  */
 function clearForm() {
+
     // Återställ formulär och studentkort
+
+    
+
 
     // Rensa eventuella felmeddelanden
 }
