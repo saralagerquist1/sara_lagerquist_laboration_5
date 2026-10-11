@@ -43,21 +43,16 @@ function onSubmit(event) {
     const name = fullnameInput.value.trim();
     const email = emailInput.value.trim();
     const phone = phoneInput.value.trim();
+    const font = fontSelect.value.trim();
 
-    if (!validateForm(name, email, phone)) {
+    if (!validateForm(name, email, phone, font)) {
         displayErrors();
     } else {
-        saveHistory(name, email, phone);
+        saveHistory(name, email, phone, font);
+        createStudentCard(name, email, phone, font);
         clearForm();
     }
-
-    // Rensar förmulär efter lyckad submit
-
-
-
-
-
-};
+}
 
 /**
  * Validerar formulärets inmatning.
@@ -66,17 +61,14 @@ function onSubmit(event) {
 
 
 // Validerar formuläret
-function validateForm(name, email, phone) {
+function validateForm(name, email, phone, font) {
 
     // Array för felmeddelanden
-
     errorArr = [];
     errorList.innerHTML = "";
 
     // Kontrollera formulärets obligatoriska fält
     let validate = true;
-
-
 
     // Visa eventuella felmeddelanden
     // Validera namn
@@ -107,9 +99,6 @@ function validateForm(name, email, phone) {
 
 function displayErrors() {
 
-    // Rensa tidigare felmeddelanden
-
-
     if (errorArr.length > 0) {
         for (let i = 0; i < errorArr.length; i++) {
             const liEl = document.createElement("li");
@@ -127,33 +116,32 @@ function displayErrors() {
  * Skapar ett studentkort och visar det på sidan.
  */
 
-function createStudentCard() {
-
-    // Hämta information från formuläret
-
-
-    // Funktion som körs när inga värden finns
-
+function createStudentCard(name, email, phone, font) {
 
     // Uppdatera studentkortet
+    previewFullname.textContent = ` ${name}`;
+    previewEmail.textContent = ` ${email}`;
+    previewPhone.textContent = ` ${phone}`;
 
-    // Lägg till studentkortet i historiken
-
-    // Spara och uppdatera historiken
+    previewFullname.style.fontFamily = font;
+    previewEmail.style.fontFamily = font;
+    previewPhone.style.fontFamily = font;
 }
+
 
 /**
  * Sparar historiken i localStorage.
  */
 
-function saveHistory(name, email, phone) {
+function saveHistory(name, email, phone, font) {
 
     // Spara history i localStorage
     const user = {
         name: name,
         email: email,
-        phone: phone
-    }
+        phone: phone,
+        font: font
+    };
 
     const localStorageData = localStorage.getItem("users");
 
@@ -177,7 +165,7 @@ function saveHistory(name, email, phone) {
  */
 function loadHistory() {
     // Hämta eventuell sparad historik
-
+    renderHistory();
     // Uppdatera history
 }
 
@@ -188,17 +176,15 @@ function loadHistory() {
 function renderHistory() {
 
     // Rensa tidigare visad historik
+    historySection.innerHTML = "";
 
     // Skriv ut innehållet i history till DOM
-
     const localStorageData = localStorage.getItem("users");
 
     const users = JSON.parse(localStorageData);
     if (users === null) {
         return;
     }
-
-
 
     for (let i = 0; i < users.length; i++) {
         const sectionEl = document.createElement("section");
@@ -208,7 +194,9 @@ function renderHistory() {
         <br>
         E-postadress: ${users[i].email}
         <br>
-        Telefon: ${users[i].phone}`;
+        Telefon: ${users[i].phone}
+        <br>
+        Typsnitt: ${users[i].font}`;
 
         sectionEl.appendChild(pEl);
         historySection.appendChild(sectionEl);
@@ -220,16 +208,15 @@ function renderHistory() {
  * Rensar formulär, aktuellt studentkort och felmeddelanden.
  */
 
-
 function clearForm() {
 
-    // Återställ formulär och studentkort
-
+    // Rensa formuläret
     fullnameInput.value = "";
     emailInput.value = "";
     phoneInput.value = "";
 
-    // Rensa eventuella felmeddelanden
+    // Rensa felmeddelanden
+    errorList.innerHTML = "";
 }
 
 
@@ -244,19 +231,4 @@ function deleteHistory() {
     historySection.innerHTML = "";
 }
 
-
-// Eventlyssnare
-
-// När formuläret skickas:
-// - validera inmatningen
-// - skapa studentkort om valideringen lyckas
-
-
-// När användaren klickar på "Rensa"
-
-
-// När användaren klickar på "Radera historik"
-
-
-// När sidan laddas:
-// - läs in och visa eventuell tidigare historik
+loadHistory();
