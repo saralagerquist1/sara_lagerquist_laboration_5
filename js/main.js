@@ -188,7 +188,7 @@ function renderHistory() {
         return;
     }
 
-    for (let i = 0; i < users.length; i++) {
+    for (let i = users.length - 1; i >= 0; i--) {
         const sectionEl = document.createElement("section");
 
         const pEl = document.createElement("p");
@@ -211,14 +211,16 @@ function renderHistory() {
  */
 function clearForm() {
 
-    // Återställer formulär och studentkort
-    fullnameInput.value = "";
-    emailInput.value = "";
-    phoneInput.value = "";
+    form.reset()
 
     previewFullname.textContent = `Namn: `;
     previewEmail.textContent = `E-post: `;
     previewPhone.textContent = `Telefon: `;
+
+    // Återställer typsnittet på förhandsvisningen
+    previewFullname.style.fontFamily = "";
+    previewEmail.style.fontFamily = "";
+    previewPhone.style.fontFamily = "";
 
     // Rensa eventuella felmeddelanden
     errorList.innerHTML = "";
